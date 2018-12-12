@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: routing-service
+    
+server:
+  port: 1111
+ 
+zuul:
+  routes:
+    registration:
+      path: /registration/**
+      service-id: registration-service
+      retryable: true
+    billing:
+      path: /billing/**
+      service-id: billing-service
+      retryable: true
+  
+  
