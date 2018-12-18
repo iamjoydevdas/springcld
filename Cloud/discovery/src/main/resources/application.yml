@@ -9,3 +9,11 @@ eureka:
     fetchRegistry: false
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    healthcheck:
+      enabled: true
+    server:
+      waitTimeInMsWhenSyncEmpty: 0
+    instance:
+      registryFetchIntervalSeconds: 30
+      leaseRenewalIntervalInSeconds: 10
+      leaseExpirationDurationInSeconds: 30

@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: transaction-service
+
+nts:
+  kafka:
+    card:
+      topic: spectrumcard
+ 
+logback:
+  request-id-label: ReqId -
+  txn-id-label: TxnId -
+  plcc:
+    path: logs/transaction-service.log
+    rolling-path: logs/ntslogs/transaction-service-%d{yyyy-MM-dd}.%i.log.zip
+    max-file-size: 10MB
+    max-history: 30
+    service-name: ServiceName - ${spring.application.name}
+    node-name: NodeName - Serv01
+  kafka:
+    topic: plcclog 
+    bootstrap-servers: ntsplccdevelk01.nts.net:9092

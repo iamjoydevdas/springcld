@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<springProperty name="service-name" source="logback.plcc.service-name" />
+	<springProperty name="node-name" source="logback.plcc.node-name" />
+	<springProperty name="destination" source="logback.plcc.path" />
+	<springProperty name="rolling-destination" source="logback.plcc.rolling-path" />
+	<springProperty name="max-file-size" source="logback.plcc.max-file-size" />
+	<springProperty name="max-history" source="logback.plcc.max-history" />
+	<springProperty name="kafka-topic" source="logback.kafka.topic" />
+	<springProperty name="bootstrap-servers" source="logback.kafka.bootstrap-servers" />
+
+	<appender name="plcc_appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${destination}</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${rolling-destination}</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>${max-file-size}</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>${max-history}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [${service-name}] [${node-name}] [%thread] %logger{36} : %msg%n%ex</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="async_plcc_appender" class="ch.qos.logback.classic.AsyncAppender">
+		<queueSize>2000</queueSize>
+		<discardingThreshold>0</discardingThreshold>
+		<appender-ref ref="plcc_appender" />
+	</appender>
+
+	<!-- Later change it to WARN -->
+	<logger name="org.springframework" level="INFO" additivity="false">
+		<appender-ref ref="async_plcc_appender" />
+	</logger>
+
+	<!-- org.apache.kafka log level must be WARN or above. Else KafkaAppender 
+		will not work -->
+	<logger name="org.apache.kafka" level="WARN" additivity="false">
+		<appender-ref ref="async_plcc_appender" />
+	</logger>
+
+	<root level="info">
+		<appender-ref ref="async_plcc_appender" />
+	</root>
+</configuration>

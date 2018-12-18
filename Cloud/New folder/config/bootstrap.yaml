@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: configuration-service
+    
+logback:
+  request-id-label: ReqId -
+  txn-id-label: TxnId -
+  plcc:
+    path: logs/configuration-service.log
+    rolling-path: logs/ntslogs/configuration-service-%d{yyyy-MM-dd}.%i.log.zip
+    max-file-size: 10MB
+    max-history: 30
+    service-name: ServiceName - ${spring.application.name}
+    node-name: NodeName - Serv01
+  kafka:
+    topic: plcclog 
+    bootstrap-servers: localhost:9092

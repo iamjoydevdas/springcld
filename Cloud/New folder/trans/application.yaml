@@ -1,0 +1,71 @@
+server:  
+  port: ${PORT:5555}
+  
+eureka:  
+  client:
+    serviceUrl:
+      defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+    initial-instance-info-replication-interval-seconds: 1
+    instance-info-replication-interval-seconds: 2
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+  healthcheck:
+    enabled: true
+      
+ribbon:
+  eureka:
+    enabled: true
+  ReadTimeout: 30000
+  ConnectTimeout: 30000
+    
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 500000
+            
+spring: 
+  redis:
+    url: localhost:6379
+    #sentinel: 
+      #master: master1
+      #nodes: rnoplccstgredis03.nts.net:26379,rnoplccstgredis01.nts.net:26379,rnoplccstgredis02.nts.net:26379
+    ssl: false
+    pool:
+      max-active: 100
+      max-idle: 100
+      max-wait: -1
+      min-idle: 10
+    timeout: 10000
+
+management:
+  security:
+    enabled: false
+      
+security:
+  basic:
+    enabled: true
+    username: PLCC-SERVICE-USER
+    password: NkVWV0NXU1IzMFVONzVDSFZWTElZVjhJNkJGUEFSMUs=
+
+
+#nts:
+#   db:
+#    url: jdbc:mysql://172.18.100.206:3306/ntsplcc-dev
+#    username: root
+#    password: QWRtaW5AMTIz
+
+nts:
+   db:
+    url: jdbc:mysql://localhost:3306/ntsplcc-dev
+    username: admin
+    password: CC2595A5033F6A8FE3CE27BEC04B7778
+   encrypt:
+    salt: QW55QWxwaGFOdW1lcmljVmFsdWVUb0luc2VydEhlcmU=
+    

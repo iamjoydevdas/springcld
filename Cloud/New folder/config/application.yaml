@@ -1,0 +1,70 @@
+spring: 
+  redis:
+    url: localhost:6379
+    #sentinel: 
+      #master: master1
+      #nodes: rnoplccstgredis03.nts.net:26379,rnoplccstgredis01.nts.net:26379,rnoplccstgredis02.nts.net:26379
+    ssl: false
+    pool:
+      max-active: 100
+      max-idle: 100
+      max-wait: -1
+      min-idle: 10
+    timeout: 10000
+
+server:  
+  port: ${PORT:8053}
+  
+#Since Spring Boot 1.5.x all endpoints are secured by default. For the sake of brevity we’re disabling the security for now
+management:
+#  context-path: /mgmt
+  security:
+    enabled: false
+
+eureka:  
+  client:
+    serviceUrl:
+      defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+    initial-instance-info-replication-interval-seconds: 1
+    instance-info-replication-interval-seconds: 2
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+  #This results in propagating application status to Eureka
+  healthcheck:
+    enabled: true
+      
+ribbon:
+  eureka:
+    enabled: true
+  ReadTimeout: 30000
+  ConnectTimeout: 30000
+  
+security:
+  basic:
+    enabled: false
+    username: root
+    password: cm9vdA==
+    
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 500000
+nts:
+  db:
+    url: jdbc:mysql://localhost:3306/ntsplcc-dev
+    username: admin
+    password: CC2595A5033F6A8FE3CE27BEC04B7778
+  encrypt:
+    salt: QW55QWxwaGFOdW1lcmljVmFsdWVUb0luc2VydEhlcmU=
+  csr:
+    url: https://cs-stg.spectrumcard.com
+    
+auto-generated-password:
+  length: 10
